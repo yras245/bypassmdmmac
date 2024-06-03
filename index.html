@@ -1,74 +1,50 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ТЕСТ</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-        }
-        .container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        input[type="text"] {
-            width: 200px;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        button {
-            padding: 10px 20px;
-            margin: 5px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .btn-1 {
-            background-color: #4CAF50;
-            color: white;
-        }
-        .btn-2 {
-            background-color: #008CBA;
-            color: white;
-        }
-    </style>
+    <title>Serial Number Checker</title>
 </head>
 <body>
-
-    <div class="container">
-        <h1>Простий сайт</h1>
-        <input type="text" id="inputField" placeholder="Введіть текст тут">
-        <div>
-            <button class="btn-1" onclick="button1Click()">Кнопка 1</button>
-            <button class="btn-2" onclick="button2Click()">Кнопка 2</button>
-        </div>
+    <h1>Serial Number Checker</h1>
+    <div>
+        <h2>Add Serial Number</h2>
+        <input type="text" id="addSerialNumber" placeholder="Enter Serial Number">
+        <button onclick="addSerialNumber()">Add Serial Number</button>
+        <p id="addResult"></p>
     </div>
-
+    <div>
+        <h2>Check Serial Number</h2>
+        <input type="text" id="checkSerialNumber" placeholder="Enter Serial Number">
+        <button onclick="checkSerialNumber()">Check Serial Number</button>
+        <p id="checkResult"></p>
+    </div>
     <script>
-        function button1Click() {
-            const input = document.getElementById('inputField').value;
-            alert('Кнопка 1 натиснута. Введений текст: ' + input);
+        function addSerialNumber() {
+            const serialNumber = document.getElementById('addSerialNumber').value;
+            fetch('api.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ action: 'add', serial_number: serialNumber })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('addResult').innerText = data.message;
+            })
+            .catch(error => console.error('Error:', error));
         }
 
-        function button2Click() {
-            const input = document.getElementById('inputField').value;
-            alert('Кнопка 2 натиснута. Введений текст: ' + input);
+        function checkSerialNumber() {
+            const serialNumber = document.getElementById('checkSerialNumber').value;
+            fetch(`api.php?action=check&serial_number=${serialNumber}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('checkResult').innerText = data.exists ? 'Serial number exists' : 'Serial number does not exist';
+            })
+            .catch(error => console.error('Error:', error));
         }
     </script>
-
 </body>
 </html>
-
