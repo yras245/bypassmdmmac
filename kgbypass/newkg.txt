@@ -1,0 +1,4 @@
+am start -n com.samsung.android.FactoryTestLauncher/com.samsung.android.FactoryTestLauncher.addons.Shell.ShellActivity
+service call knoxguard_service 37
+service call knoxguard_service 41 s16 'null'
+service call knoxguard_service 40
